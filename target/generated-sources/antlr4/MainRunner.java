@@ -11,9 +11,9 @@ public class MainRunner
     public static void main( String[] args) throws Exception 
     {
     	result = "";
-//    	System.out.print("Enter in your .m file name: ");
-//    	String fileName = System.console().readLine();
-    	String fileName = System.getProperty("user.dir") + "/scripts/G5Test1.m";
+    	System.out.print("Enter in your .m file name: ");
+    	String fileName = System.console().readLine();
+//    	String fileName = System.getProperty("user.dir") + "/scripts/G5Test1.m";
         ANTLRInputStream input = new ANTLRFileStream(fileName);
 
         MATLABLexer lexer = new MATLABLexer(input);
@@ -28,7 +28,7 @@ public class MainRunner
         
         FileWriter fw;
         try{
-        	fw = new FileWriter(new File("G5TestOutput.xml"));
+        	fw = new FileWriter(new File("G6TestOutput.xml"));
         	
         	fw.write(output);
         	fw.close();
