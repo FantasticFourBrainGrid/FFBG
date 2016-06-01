@@ -22,8 +22,8 @@ functionMFile  : f_def_line f_body
 
 f_def_line	:	FUNCTION ID '=' ID f_input
 		|	FUNCTION ID f_input
-		|	FUNCTION list_reference '=' ID f_input
-		|	FUNCTION list_reference
+		//|	FUNCTION list_reference '=' ID f_input
+		//|	FUNCTION list_reference
 		;
 
 f_input		:
@@ -49,9 +49,10 @@ scriptMFile:   (   statement (';'|NL)
 
 
 statement   : ID 
-          | assignment
- //         | wasGeneratedBy
- //         | wasDerivedFrom
+          //| assignment
+          | wasGeneratedBy
+          | wasDerivedFrom
+          //| entityDeclare
           | expr
           | command_form
           | for_command
@@ -64,23 +65,26 @@ statement   : ID
 assignment  : entity_reference '=' expr | activity_reference '=' expr
             ;
             
-//wasDerivedFrom : entity_reference '=' entity_reference ;
-//wasGeneratedBy : entity_reference '=' activity_reference;
+wasDerivedFrom : entity_reference '=' expr ;
+wasGeneratedBy : entity_reference '=' activity_reference;
 
 entity_reference   : ID ;
             
-activity_reference : ID '(' argument_list ')' ;
+activity_reference : ID '(' used ')' 
+					| ID '()';
 
-argument_list	: ':'
+used	: ':'
 		| expr
-		| ':' ',' argument_list
-		| expr ',' argument_list
+		| ':' ',' used
+		| expr ',' used
 		;
 
 list_reference : '[' list ']'
+			   | '[' matrixlist ']'
 			   | '[' ID ']' ;
 
-list : ID ',' list | ID;
+matrixlist: (list';')*list;
+list : (expr ','+ | expr +)expr;
 
 command_form : ID command_args
              ;
@@ -103,7 +107,6 @@ return_command : RETURNS
                ;
 
 expr	: '(' expr ')'
-//	| matrix
 	| expr '.^' expr
 	| expr '^' expr
 //	| expr TRANSPOSE
@@ -137,6 +140,8 @@ expr	: '(' expr ')'
 	| activity_reference
         | INT
         | FLOAT
+        | STRING
+    | list_reference
 	;
 
 
